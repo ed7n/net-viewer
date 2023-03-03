@@ -1,0 +1,13 @@
+{%-unless pageHasStyleNav-%}
+<link rel="stylesheet" href="{{sitePathRes}}/styles/nav.css" />
+  {%-assign pageHasStyleNav = true%}
+{%endunless-%}
+<nav>
+  <span>{{navLabelSite}}</span><ul class="line"><li
+>[<{{htmlAOut}}"{{siteData.eon}}/net/viewer"
+>Home</a>]</li><li
+>[<{{htmlAOut}}"{{siteData.eon}}/pages/privacy"
+>Privacy</a>]</li><li
+>[<{{htmlAOut}}"{{siteData.eon}}/pages/contact"
+>Contact</a>]</li></ul>
+</nav>

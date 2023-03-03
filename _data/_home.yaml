@@ -1,0 +1,17 @@
+path: ""
+version: "Update 0 Revision 0"
+date: 2023-03-03
+head:
+  description: "Adjustable file viewer."
+body:
+  title: "NET-Viewer"
+menu:
+  - label: "Core"
+    href: "#core"
+    title: "Core"
+  - label: "Display"
+    href: "#display"
+    title: "Display"
+  - label: "Reset"
+    href: "#reset"
+    title: "Reset"

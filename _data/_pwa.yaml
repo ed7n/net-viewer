@@ -1,0 +1,11 @@
+path: "pwa"
+version: "Revision 1"
+date: 2023-02-19
+head:
+  title: "NET-Installer"
+  manifest: "pwa.webmanifest"
+body:
+  title: "NET-Installer"
+  subtitle: "Manage offline access to NET-Viewer."
+menu:
+  - key: "_home"

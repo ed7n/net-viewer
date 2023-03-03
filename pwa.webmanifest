@@ -1,0 +1,19 @@
+{
+  "name": "NET-Viewer",
+  "description": "Adjustable file viewer.",
+  "display": "minimal-ui",
+  "icons": [
+    {
+      "src": "https://ed7n.github.io/res/media/favicon.png",
+      "sizes": "100x100",
+      "type": "image/png"
+    },
+    {
+      "src": "https://ed7n.github.io/res/media/favicon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "scope": "/net-viewer/",
+  "start_url": "/net-viewer/"
+}

@@ -1,0 +1,34 @@
+{%-include variables.html-%}
+<!DOCTYPE html>
+{%include head.html%}
+    <link rel="stylesheet" href="{{sitePathRes}}/styles/application.css" />
+  {%-if pageTitle%}
+    <meta name="application-name" content="{{pageTitle}}" />
+  {%-endif%}
+  </head>
+  <body>
+{%-unless noCurtain%}
+{%include curtain.html-%}
+{%-endunless-%}
+{%-unless noBackground%}
+{%include background.html-%}
+{%-endunless%}
+    <main>
+      <article>
+{%-unless noHeader%}
+{%include header.html-%}
+{%-endunless-%}
+{%-unless noNavPage%}
+{%include nav-page.html-%}
+{%-endunless%}
+{{content
+}}      </article>
+    </main>
+{%-unless noFooter%}
+{%include footer.html-%}
+{%-endunless-%}
+{%-unless noNavPage%}
+{%include nav-tree.html-%}
+{%-endunless%}
+  </body>
+</html>
