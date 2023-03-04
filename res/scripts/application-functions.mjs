@@ -10,6 +10,7 @@ import {
   NUL_STRING,
   EVENT_CHANGE,
   EVENT_INPUT,
+  FILE_SIZE_MAX_SAFE,
   MESSAGES,
 } from "./constants.mjs";
 import { defaultOrAsIs, testFile, setWindowSubtitle } from "./functions.mjs";
@@ -46,6 +47,13 @@ export function alertFileProperties() {
   }
 }
 
+/** Closes the current instance. */
+export function close() {
+  unloadView();
+  getSource().value = NUL_STRING;
+  loadView("nul");
+}
+
 /** Downloads the given file by its name and URL. */
 export function download(name = NUL_STRING, url = NUL_STRING) {
   const href = application.anchor.href;
@@ -68,26 +76,33 @@ export function loadFile(files = getSource().valueOrPreset, index = 0) {
   if (files.length) {
     const file = files[index];
     if (testFile(file)) {
-      let type = file.type;
-      type =
-        type === "application/pdf" || type === "text/html"
-          ? "frame"
-          : type.slice(0, type.indexOf("/")).toLowerCase();
-      unloadView();
-      setWindowSubtitle(file.name);
+      let type;
+      switch (file.type) {
+        case "application/pdf":
+        case "text/html":
+          type = "frame";
+          break;
+        default:
+          type = file.type.slice(0, file.type.indexOf("/")).toLowerCase();
+      }
       switch (type) {
         case "frame":
         case "image":
           getSource().element.disabled = false;
         case "audio":
         case "video":
-          loadView(type);
+          prepareOutput(file.name, type);
           getOutput(type).element.src = URL.createObjectURL(file);
           getCoreEntry("speed").element.dispatchEvent(EVENT_INPUT);
           break;
         default:
-          loadView("text");
-          getReader().readAsText(file);
+          if (file.size <= FILE_SIZE_MAX_SAFE || confirm(MESSAGES.loadLarge)) {
+            prepareOutput(file.name, "text");
+            getReader().readAsText(file);
+          } else {
+            getSource().element.disabled = false;
+            return;
+          }
       }
       return (application.instance.file = file);
     }
@@ -150,6 +165,21 @@ export function preserve() {
       out[key] = entry.safeValue;
     })
   );
+}
+
+/** Saves form entries as a file download. */
+export function save() {
+  const file = new File(
+    [JSON.stringify(preserve())],
+    getName().substring(0, FILE_NAME_LENGTH_MAX) + FILE_EXTENSION,
+    { type: DATA_TYPE }
+  );
+  return download(file.name, URL.createObjectURL(file));
+}
+
+/** Prints the window. */
+export function print() {
+  return window.print();
 }
 
 /** Resets form entries. */
@@ -230,6 +260,16 @@ export function getMenuEntries() {
   return application.entries.menu;
 }
 
+/** Returns whether the current instance is modified. */
+export function isModified() {
+  return application.instance.modified;
+}
+
+/** Sets the modified flag to the given value. */
+export function setModified(value = true) {
+  return (application.instance.modified = value);
+}
+
 /** Returns the current instance name. */
 export function getName() {
   return getFile() ? getFile().name : NUL_STRING;
@@ -263,6 +303,13 @@ export function getSource() {
 /** Returns the current output view. */
 export function getView() {
   return application.instance.view;
+}
+
+/** Prepares the given output view with the given title. */
+function prepareOutput(title = NUL_STRING, view = "text") {
+  unloadView();
+  setWindowSubtitle(title);
+  loadView(view);
 }
 
 /** Returns the given control by its getter and key. */

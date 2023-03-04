@@ -8,15 +8,15 @@
 import { NUL_STRING } from "./constants.mjs";
 import {
   alertFileProperties,
+  close,
   loadFile,
   loadReader,
-  loadView,
-  unloadView,
   update,
   getButton,
   getCoreEntries,
   getDisplayEntries,
   getMenuEntry,
+  setModified,
   getOutput,
   getOutputs,
   getReader,
@@ -61,15 +61,14 @@ export function setupEvents() {
 
 /** Adds listeners to buttons that invoke actions. */
 function setupButtonEvents() {
-  getButton("close").element.addEventListener("click", () => {
-    unloadView();
-    getSource().value = NUL_STRING;
-    loadView("nul");
-  });
+  getButton("close").element.addEventListener("click", close);
   getButton("load").element.addEventListener("click", () => {
     getSource().element.click();
   });
-  getButton("properties").element.addEventListener("click", alertFileProperties);
+  getButton("properties").element.addEventListener(
+    "click",
+    alertFileProperties
+  );
   getButton("pwa").element.addEventListener("click", () => {
     location.assign("pwa");
   });
@@ -91,6 +90,7 @@ function setupEntryEvents() {
   ["audio", "video"].forEach((key) => {
     const element = output[key].element;
     addBooleanListener(core.withPitch, element, "preservesPitch", true);
+    addPropertyListener(core.repeat, element, "loop");
     addPropertyListener(core.speed, element, "playbackRate");
   });
   addClassListener(core.wordWrap, output.text, "word-wrap");
@@ -101,6 +101,7 @@ function setupEntryEvents() {
   addStyleVariableListener(display, "blur", "px");
   addStyleVariableListener(display, "brightness", "%");
   addStyleVariableListener(display, "contrast", "%");
+  addStyleVariableListener(display, "grayscale", "%");
   addStyleVariableListener(display, "hue", "deg");
   addStyleVariableListener(display, "invert", "%");
   addStyleVariableListener(display, "justify");
@@ -142,12 +143,6 @@ function setupViewEvents() {
 
 /** Adds listeners to the window. */
 function setupWindowEvents() {}
-
-/**
- * Adds a `beforeunload` event listener to the window by modified flag and the
- * given entry.
- */
-function addBeforeUnloadListenerBy(entry) {}
 
 /**
  * Adds a change event listener to the given entry that sets the given boolean

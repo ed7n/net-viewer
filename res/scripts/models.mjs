@@ -77,6 +77,18 @@ export class FormEntry extends FormControl {
   }
 }
 
+/** Represents a data form entry. */
+export class DataFormEntry extends FormEntry {
+  constructor(options = NUL_OBJECT) {
+    super(options);
+    /** Save? */
+    this.save = defaultOrAsIs(true, options.save);
+    if (this.save || options.persistent === undefined) {
+      this.persistent = false;
+    }
+  }
+}
+
 /** Represents an output element. */
 export class Output extends ElementModel {
   constructor(options = NUL_OBJECT, prefix = "output-") {

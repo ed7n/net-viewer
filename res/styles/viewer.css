@@ -1,3 +1,7 @@
+#output-text {
+  font: initial;
+}
+
 #output,
 .colors {
   display: flex;
@@ -40,9 +44,9 @@
 
 #output > * {
   filter: hue-rotate(var(--viewerHue)) invert(var(--viewerInvert))
-    saturate(var(--viewerSaturation)) sepia(var(--viewerSepia))
-    contrast(var(--viewerContrast)) brightness(var(--viewerBrightness))
-    blur(var(--viewerBlur));
+    saturate(var(--viewerSaturation)) grayscale(var(--viewerGrayscale))
+    sepia(var(--viewerSepia)) contrast(var(--viewerContrast))
+    brightness(var(--viewerBrightness)) blur(var(--viewerBlur));
   max-height: 100%;
   max-width: 100%;
 }
@@ -66,16 +70,24 @@
   border: unset;
 }
 
+#output-nul,
+#output-text {
+  font-family: var(--viewerFontFamily);
+  font-size: var(--viewerFontScale);
+  line-height: var(--viewerLineHeight);
+}
+
+#output-nul > p > kbd,
+#output-nul > p > kbd > samp {
+  font: inherit;
+}
+
 #output-text {
   background-color: var(--colorAccentMin);
   border-inline-end-color: var(--color);
   border-inline-end-width: var(--widthBorder);
   border-inline-start-color: var(--color);
   border-inline-start-width: var(--widthBorder);
-  font: initial;
-  font-family: var(--viewerFontFamily);
-  font-size: var(--viewerFontScale);
-  line-height: var(--viewerLineHeight);
   overflow: scroll;
   padding: var(--spacer4);
   user-select: text;
@@ -89,14 +101,12 @@
 .colors {
   flex-direction: row;
   float: right;
-  height: var(--spacer3);
+  height: var(--spacer2);
   width: var(--spacer16);
-  position: relative;
-  top: calc(-1 * var(--spacer3) * 1.5 - var(--lineHeightForm) / 2);
 }
 
 .colors > :not(:last-child) {
-  margin-inline-end: var(--spacerPx);
+  margin-inline-end: calc(var(--spacer) / 2);
 }
 
 .colors > .blue {

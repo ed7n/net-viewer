@@ -1,0 +1,17 @@
+NET-Viewer: Changes
+
+—Update 0
+
+——Revision 1, 03/04/2023.
+- `Grayscale`
+- `Repeat`.
+- Grouped panel view menu items.
+- Moved application header to panel under About.
+- Nul core text styles follow most of those of the text core.
+- Redone loading instructions.
+- Text core entry unit suffixes.
+- Text core prompts on file sizes greater than 1 MiB.
+- Tweaked color bar height and child margin.
+
+——Revision 0, 03/03/2023.
+- Initial release.

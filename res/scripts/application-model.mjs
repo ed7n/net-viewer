@@ -53,6 +53,10 @@ export const application = Object.freeze({
         id: "core-line-height",
         preset: 1.2,
       }),
+      repeat: new FormEntry({
+        id: "core-repeat",
+        preset: false,
+      }),
       speed: new FormEntry({
         id: "core-speed",
         preset: 1,
@@ -83,6 +87,10 @@ export const application = Object.freeze({
       contrast: new FormEntry({
         id: "display-contrast",
         preset: 100,
+      }),
+      grayscale: new FormEntry({
+        id: "display-grayscale",
+        preset: 0,
       }),
       hue: new FormEntry({
         id: "display-hue",
@@ -143,6 +151,7 @@ export const application = Object.freeze({
   /** Current instance. */
   instance: Object.seal({
     file: null,
+    modified: false,
     view: NUL_STRING,
   }),
 });

@@ -17,7 +17,7 @@ const PATH_PAGE = "/net-viewer/";
 /** Site resource path. */
 const PATH_SITE = "https://ed7n.github.io/res/";
 /** Name of the cache to operate on. */
-const CACHE_NAME = "net-viewer-u0r0";
+const CACHE_NAME = "net-viewer-u0r1";
 /** Request URLs whose response is to be cached. */
 const CACHE_URLS = Object.freeze([
   PATH_PAGE + "",
