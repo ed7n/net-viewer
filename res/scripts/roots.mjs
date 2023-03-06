@@ -4,7 +4,7 @@
  * For internal use only.
  */
 
-import { qs } from "./functions.mjs";
+import { qs } from "./common/functions.mjs";
 
 /** Application root element. */
 export const application = qs(document, "article");

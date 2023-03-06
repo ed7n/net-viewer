@@ -4,13 +4,9 @@
  * Start here.
  */
 
-import {
-  loadView,
-  reset,
-  update,
-  getEntries,
-} from "./application-functions.mjs";
+import { loadView } from "./application-functions.mjs";
 import { setupEvents } from "./events.mjs";
+import { reset, update, getEntries } from "./common/application-functions.mjs";
 
 setupEvents();
 Object.values(getEntries())

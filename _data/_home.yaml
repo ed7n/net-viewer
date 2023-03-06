@@ -1,14 +1,14 @@
 path: ""
-version: "Update 0 Revision 1"
-date: 2023-03-04
+version: "Update 0 Revision 2"
+date: 2023-03-06
 head:
   description: "Adjustable file viewer."
 body:
   title: "NET-Viewer"
 menu:
-  - label: "Core"
-    href: "#core"
-    title: "Core"
+  - label: "Cores"
+    href: "#cores"
+    title: "Cores"
   - label: "Display"
     href: "#display"
     title: "Display"

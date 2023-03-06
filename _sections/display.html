@@ -1,87 +1,14 @@
 <form>
-  <section>
-    <h3>Placement</h3>
-    <div class="group space-between">
-      <div id="field-display-align" class="field row small">
-        <label for="input-display-align">Align:</label>
-        <div class="input short">
-          <select id="input-display-align">
-            <option value="flex-start">Start</option>
-            <option value="center">Center</option>
-            <option value="flex-end">End</option>
-            <option value="stretch">Stretch</option>
-          </select>
-        </div>
-      </div>
-      <div id="field-display-justify" class="field row small">
-        <label for="input-display-justify">Justify:</label>
-        <div class="input short">
-          <select id="input-display-justify">
-            <option value="flex-start">Start</option>
-            <option value="center">Center</option>
-            <option value="flex-end">End</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section>
-    <h3>Filters</h3>
-    <div id="field-display-hue" class="field row">
-      <label for="input-display-hue">Hue:</label>
-      <div class="input short">
-        <input id="input-display-hue" type="number" min="0" max="360" />
-        <span>°</span>
-      </div>
-    </div>
-    <div id="field-display-invert" class="field row">
-      <label for="input-display-invert">Invert:</label>
-      <div class="input short">
-        <input id="input-display-invert" type="number" min="0" max="100" />
-        <span>%</span>
-      </div>
-    </div>
-    <div id="field-display-saturation" class="field row">
-      <label for="input-display-saturation">Saturation:</label>
-      <div class="input short">
-        <input id="input-display-saturation" type="number" min="0" max="1023" />
-        <span>%</span>
-      </div>
-    </div>
-    <div id="field-display-grayscale" class="field row">
-      <label for="input-display-grayscale">Grayscale:</label>
-      <div class="input short">
-        <input id="input-display-grayscale" type="number" min="0" max="100" />
-        <span>%</span>
-      </div>
-    </div>
-    <div id="field-display-sepia" class="field row">
-      <label for="input-display-sepia">Sepia:</label>
-      <div class="input short">
-        <input id="input-display-sepia" type="number" min="0" max="100" />
-        <span>%</span>
-      </div>
-    </div>
-    <div id="field-display-contrast" class="field row">
-      <label for="input-display-contrast">Contrast:</label>
-      <div class="input short">
-        <input id="input-display-contrast" type="number" min="0" max="1023" />
-        <span>%</span>
-      </div>
-    </div>
-    <div id="field-display-brightness" class="field row">
-      <label for="input-display-brightness">Brightness:</label>
-      <div class="input short">
-        <input id="input-display-brightness" type="number" min="0" max="1023" />
-        <span>%</span>
-      </div>
-    </div>
-    <div id="field-display-blur" class="field row">
-      <label for="input-display-blur">Blur:</label>
-      <div class="input short">
-        <input id="input-display-blur" type="number" min="0" max="127" step="0.1" />
-        <span>px</span>
-      </div>
-    </div>
-  </section>
+<details open>
+<summary><h3>Position</h3></summary>
+{%include_relative _sections/sections/position.html-%}
+</details>
+<details>
+<summary><h3>Filter</h3></summary>
+{%include_relative _sections/sections/filter.html-%}
+</details>
+<details>
+<summary><h3>Transform</h3></summary>
+{%include_relative _sections/sections/transform.html-%}
+</details>
 </form>

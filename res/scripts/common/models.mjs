@@ -1,5 +1,5 @@
 /**
- * Viewer: Models
+ * NET: Models
  *
  * Form and output model classes.
  */
@@ -11,7 +11,7 @@ import {
   getInputSafeValue,
   setInputValue,
 } from "./functions.mjs";
-import { application, output } from "./roots.mjs";
+import { application, output } from "../roots.mjs";
 
 /** Represents an element. This is a wrapper for interoperability purposes. */
 export class ElementModel {

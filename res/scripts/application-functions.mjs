@@ -5,66 +5,24 @@
  * directly on the model.
  */
 
-import {
-  NUL_OBJECT,
-  NUL_STRING,
-  EVENT_CHANGE,
-  EVENT_INPUT,
-  FILE_SIZE_MAX_SAFE,
-  MESSAGES,
-} from "./constants.mjs";
-import { defaultOrAsIs, testFile, setWindowSubtitle } from "./functions.mjs";
+import { FILE_SIZE_MAX_SAFE, MESSAGES } from "./constants.mjs";
 import { application } from "./application-model.mjs";
 import { activateView, deactivateView } from "./views.mjs";
-
-/** For use with `getEntries`. */
-const entries = (() => {
-  let out = {};
-  Object.entries(application.entries).forEach(([key, value]) => {
-    Object.entries(value).forEach(([subKey, value]) => {
-      out[key + subKey.charAt(0).toUpperCase + subKey.substring(1)] = value;
-    });
-  });
-  return Object.freeze(out);
-})();
-
-/** Alerts the current file properties. */
-export function alertFileProperties() {
-  const file = getFile();
-  if (file) {
-    alert(
-      "Name: " +
-        file.name +
-        "\nType: " +
-        file.type +
-        "\nSize: " +
-        file.size +
-        " bytes\nLast modified: " +
-        new Date(file.lastModified).toISOString()
-    );
-  } else {
-    alert(MESSAGES.fileNul);
-  }
-}
+import { NUL_STRING, EVENT_INPUT } from "./common/constants.mjs";
+import { testFile, setWindowSubtitle } from "./common/functions.mjs";
+import {
+  getControl,
+  getFile,
+  getOutput,
+  getReader,
+  getSource,
+} from "./common/application-functions.mjs";
 
 /** Closes the current instance. */
 export function close() {
   unloadView();
   getSource().value = NUL_STRING;
   loadView("nul");
-}
-
-/** Downloads the given file by its name and URL. */
-export function download(name = NUL_STRING, url = NUL_STRING) {
-  const href = application.anchor.href;
-  application.anchor.download = name;
-  if (href !== url) {
-    if (href) {
-      URL.revokeObjectURL(href);
-    }
-    application.anchor.href = url;
-  }
-  application.anchor.click();
 }
 
 /**
@@ -88,12 +46,12 @@ export function loadFile(files = getSource().valueOrPreset, index = 0) {
       switch (type) {
         case "frame":
         case "image":
-          getSource().element.disabled = false;
         case "audio":
         case "video":
           prepareOutput(file.name, type);
           getOutput(type).element.src = URL.createObjectURL(file);
-          getCoreEntry("speed").element.dispatchEvent(EVENT_INPUT);
+          getMediaEntry("speed").element.dispatchEvent(EVENT_INPUT);
+          getSource().element.disabled = false;
           break;
         default:
           if (file.size <= FILE_SIZE_MAX_SAFE || confirm(MESSAGES.loadLarge)) {
@@ -149,105 +107,24 @@ export function unloadView(key = getView()) {
   application.instance.file = null;
 }
 
-/**
- * Populates form entries with the given values. This is opposite to `preserve`.
- */
-export function populate(values = NUL_OBJECT) {
-  return Object.entries(getEntries()).forEach(([key, entry]) => {
-    entry.value = defaultOrAsIs(entry.preset, values[key]);
-  });
+/** Returns the given filter form entry by its key. */
+export function getFilterEntry(key = NUL_STRING) {
+  return getControl(getFilterEntries, key);
 }
 
-/** Returns a snapshot of form entry values. This is opposite to `populate`. */
-export function preserve() {
-  return Object.freeze(
-    Object.entries(getEntries()).forEach(([key, entry]) => {
-      out[key] = entry.safeValue;
-    })
-  );
+/** Returns filter form entries. */
+export function getFilterEntries() {
+  return application.entries.filter;
 }
 
-/** Saves form entries as a file download. */
-export function save() {
-  const file = new File(
-    [JSON.stringify(preserve())],
-    getName().substring(0, FILE_NAME_LENGTH_MAX) + FILE_EXTENSION,
-    { type: DATA_TYPE }
-  );
-  return download(file.name, URL.createObjectURL(file));
+/** Returns the given media form entry by its key. */
+export function getMediaEntry(key = NUL_STRING) {
+  return getControl(getMediaEntries, key);
 }
 
-/** Prints the window. */
-export function print() {
-  return window.print();
-}
-
-/** Resets form entries. */
-export function reset() {
-  return Object.values(getEntries()).forEach((entry) => {
-    entry.value = entry.preset;
-  });
-}
-
-/** Dispatches change or input events on form entries. */
-export function update() {
-  return Object.values(getEntries()).forEach((entry) => {
-    entry.element.dispatchEvent(
-      entry.element.type === "checkbox" || entry.element.type === "file"
-        ? EVENT_CHANGE
-        : EVENT_INPUT
-    );
-  });
-}
-
-/** Returns collapsible fieldsets. */
-export function getAccordions() {
-  return application.accordions;
-}
-
-/** Returns the given form button by its key. */
-export function getButton(key = NUL_STRING) {
-  return getControl(getButtons, key);
-}
-
-/** Returns form buttons. */
-export function getButtons() {
-  return application.buttons;
-}
-
-/** Returns the given core form entry by its key. */
-export function getCoreEntry(key = NUL_STRING) {
-  return getControl(getCoreEntries, key);
-}
-
-/** Returns core form entries. */
-export function getCoreEntries() {
-  return application.entries.core;
-}
-
-/** Returns the given display form entry by its key. */
-export function getDisplayEntry(key = NUL_STRING) {
-  return getControl(getDisplayEntries, key);
-}
-
-/** Returns display form entries. */
-export function getDisplayEntries() {
-  return application.entries.display;
-}
-
-/** Returns the given form entry by its key. */
-export function getEntry(key = NUL_STRING) {
-  return getControl(getEntries, key);
-}
-
-/** Returns form entries. */
-export function getEntries() {
-  return entries;
-}
-
-/** Returns the current working file. */
-export function getFile() {
-  return application.instance.file;
+/** Returns media form entries. */
+export function getMediaEntries() {
+  return application.entries.media;
 }
 
 /** Returns the given menu form entry by its key. */
@@ -260,44 +137,39 @@ export function getMenuEntries() {
   return application.entries.menu;
 }
 
-/** Returns whether the current instance is modified. */
-export function isModified() {
-  return application.instance.modified;
-}
-
-/** Sets the modified flag to the given value. */
-export function setModified(value = true) {
-  return (application.instance.modified = value);
-}
-
 /** Returns the current instance name. */
 export function getName() {
   return getFile() ? getFile().name : NUL_STRING;
 }
 
-/** Returns the given output by its key. */
-export function getOutput(key = NUL_STRING) {
-  return getControl(getOutputs, key);
+/** Returns the given position form entry by its key. */
+export function getPositionEntry(key = NUL_STRING) {
+  return getControl(getPositionEntries, key);
 }
 
-/** Returns outputs. */
-export function getOutputs() {
-  return application.outputs;
+/** Returns position form entries. */
+export function getPositionEntries() {
+  return application.entries.position;
 }
 
-/** Returns the file reader. */
-export function getReader() {
-  return application.reader;
+/** Returns the given text form entry by its key. */
+export function getTextEntry(key = NUL_STRING) {
+  return getControl(getTextEntries, key);
 }
 
-/** Returns the root element. */
-export function getRoot() {
-  return application.root;
+/** Returns text form entries. */
+export function getTextEntries() {
+  return application.entries.text;
 }
 
-/** Returns the source file input. */
-export function getSource() {
-  return application.source;
+/** Returns the given transform form entry by its key. */
+export function getTransformEntry(key = NUL_STRING) {
+  return getControl(getTransformEntries, key);
+}
+
+/** Returns transform form entries. */
+export function getTransformEntries() {
+  return application.entries.transform;
 }
 
 /** Returns the current output view. */
@@ -310,9 +182,4 @@ function prepareOutput(title = NUL_STRING, view = "text") {
   unloadView();
   setWindowSubtitle(title);
   loadView(view);
-}
-
-/** Returns the given control by its getter and key. */
-function getControl(getter, key) {
-  return getter()[key];
 }

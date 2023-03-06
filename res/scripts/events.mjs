@@ -5,24 +5,31 @@
  * happen.
  */
 
-import { NUL_STRING } from "./constants.mjs";
 import {
-  alertFileProperties,
   close,
   loadFile,
   loadReader,
-  update,
-  getButton,
-  getCoreEntries,
-  getDisplayEntries,
+  getFilterEntries,
+  getMediaEntries,
   getMenuEntry,
+  getPositionEntries,
+  getTextEntries,
+  getTransformEntries,
+  getView,
+} from "./application-functions.mjs";
+import { NUL_STRING } from "./common/constants.mjs";
+import {
+  alertFileProperties,
+  reset,
+  update,
+  getButtons,
   setModified,
   getOutput,
   getOutputs,
   getReader,
   getRoot,
   getSource,
-} from "./application-functions.mjs";
+} from "./common/application-functions.mjs";
 import {
   setBooleanProperty,
   setClassWord,
@@ -31,8 +38,8 @@ import {
   setProperty,
   setSrc,
   setStyleVariable,
-} from "./edits.mjs";
-import { setForceDark } from "./views.mjs";
+} from "./common/edits.mjs";
+import { collapseAll, expandAll, setForceDark } from "./common/views.mjs";
 
 /** Set post-modification events? */
 let anesthesia = true;
@@ -61,68 +68,97 @@ export function setupEvents() {
 
 /** Adds listeners to buttons that invoke actions. */
 function setupButtonEvents() {
-  getButton("close").element.addEventListener("click", close);
-  getButton("load").element.addEventListener("click", () => {
-    getSource().element.click();
+  const buttons = getButtons();
+  const controls = [
+    getFilterEntries,
+    getMediaEntries,
+    getPositionEntries,
+    getTextEntries,
+    getTransformEntries,
+  ];
+  addActionListener(buttons.eject, close);
+  addActionListener(buttons.load, () => getSource().element.click());
+  addActionListener(buttons.properties, alertFileProperties);
+  addActionListener(buttons.pwa, () => location.assign("pwa"));
+  addActionListener(buttons.resetControls, () => {
+    reset(controls);
+    update(controls);
   });
-  getButton("properties").element.addEventListener(
-    "click",
-    alertFileProperties
-  );
-  getButton("pwa").element.addEventListener("click", () => {
-    location.assign("pwa");
-  });
-  getButton("resetControls").element.addEventListener("click", () => {
-    [getCoreEntries, getDisplayEntries].forEach((getter) => {
-      Object.values(getter()).forEach((entry) => {
-        entry.value = entry.preset;
-      });
+  [
+    ["filter", getFilterEntries],
+    ["media", getMediaEntries],
+    ["position", getPositionEntries],
+    ["text", getTextEntries],
+    ["transform", getTransformEntries],
+  ].forEach(([key, getter]) => {
+    addActionListener(buttons[key + "Reset"], () => {
+      reset([getter]);
+      update([getter]);
     });
-    update();
   });
+  [
+    ["searchN05", -5],
+    ["searchN20", -20],
+    ["searchP05", 5],
+    ["searchP20", 20],
+  ].forEach(([key, operand]) => {
+    addActionListener(buttons[key], () => {
+      const view = getView();
+      if (view === "audio" || view === "video") {
+        getOutput(view).element.currentTime += operand;
+      }
+    });
+  });
+  addActionListener(buttons.viewCollapse, collapseAll);
+  addActionListener(buttons.viewExpand, expandAll);
 }
 
 /** Adds listeners to entries that update outputs. */
 function setupEntryEvents() {
-  const core = getCoreEntries();
-  const display = getDisplayEntries();
+  const filter = getFilterEntries();
+  const media = getMediaEntries();
   const output = getOutputs();
+  const position = getPositionEntries();
+  const text = getTextEntries();
+  const transform = getTransformEntries();
+  addClassListener(text.rightToLeft, output.text, "right-to-left");
+  addClassListener(text.wordWrap, output.text, "word-wrap");
+  addClassListener(transform.reverse, output.root, "reverse");
+  addStyleVariableListener(filter, "blur", "px");
+  addStyleVariableListener(filter, "brightness");
+  addStyleVariableListener(filter, "contrast");
+  addStyleVariableListener(filter, "grayscale", "%");
+  addStyleVariableListener(filter, "hueRotate", "deg");
+  addStyleVariableListener(filter, "invert", "%");
+  addStyleVariableListener(filter, "saturate");
+  addStyleVariableListener(filter, "sepia", "%");
+  addStyleVariableListener(position, "align");
+  addStyleVariableListener(position, "justify");
+  addStyleVariableListener(text, "fontFamily");
+  addStyleVariableListener(text, "fontSize", "em");
+  addStyleVariableListener(text, "lineHeight");
+  addStyleVariableListener(transform, "rotate", "deg");
+  addStyleVariableListener(transform, "scale");
   ["audio", "video"].forEach((key) => {
     const element = output[key].element;
-    addBooleanListener(core.withPitch, element, "preservesPitch", true);
-    addPropertyListener(core.repeat, element, "loop");
-    addPropertyListener(core.speed, element, "playbackRate");
+    addBooleanListener(media.autoplay, element, "autoplay");
+    addBooleanListener(media.repeat, element, "loop");
+    addBooleanListener(media.withPitch, element, "preservesPitch", true);
+    addPropertyListener(media.speed, element, "playbackRate");
   });
-  addClassListener(core.wordWrap, output.text, "word-wrap");
-  addStyleVariableListener(core, "fontFamily");
-  addStyleVariableListener(core, "fontScale", "em");
-  addStyleVariableListener(core, "lineHeight");
-  addStyleVariableListener(display, "align");
-  addStyleVariableListener(display, "blur", "px");
-  addStyleVariableListener(display, "brightness", "%");
-  addStyleVariableListener(display, "contrast", "%");
-  addStyleVariableListener(display, "grayscale", "%");
-  addStyleVariableListener(display, "hue", "deg");
-  addStyleVariableListener(display, "invert", "%");
-  addStyleVariableListener(display, "justify");
-  addStyleVariableListener(display, "saturation", "%");
-  addStyleVariableListener(display, "sepia", "%");
 }
 
 /** Adds listeners to file operators. */
 function setupFileEvents() {
-  ["audio", "video"].forEach((key) => {
-    getOutput(key).element.addEventListener("loadedmetadata", () => {
-      getSource().element.disabled = false;
-    });
-  });
   getReader().addEventListener("load", loadReader);
-  getRoot().element.addEventListener("drop", (event) => {
-    event.preventDefault();
-    loadFile(event.dataTransfer.files);
-  });
   getRoot().element.addEventListener("dragover", (event) => {
     event.preventDefault();
+  });
+  getRoot().element.addEventListener("drop", (event) => {
+    event.preventDefault();
+    if (event.dataTransfer.files.length) {
+      loadFile(event.dataTransfer.files);
+    }
   });
   getSource().element.addEventListener("change", (event) => {
     loadFile(event.target.files);
@@ -134,15 +170,22 @@ function setupFormEvents() {}
 
 /** Adds listeners to entries that modifies the view. */
 function setupViewEvents() {
-  addClassListener(getMenuEntry("controls"), getRoot(), "no-controls", true);
-  getMenuEntry("forceDark").element.addEventListener("change", (event) => {
+  addClassListener(getMenuEntry("viewControls"), getRoot(), "no-panels", true);
+  addClassListener(getMenuEntry("viewReverse"), getRoot(), "reverse");
+  getMenuEntry("viewForceDark").element.addEventListener("change", (event) => {
     setForceDark(event.target.checked);
   });
-  addClassListener(getMenuEntry("reverse"), getRoot(), "reverse");
 }
 
 /** Adds listeners to the window. */
 function setupWindowEvents() {}
+
+/**
+ * Adds a click event listener to the given button that runs the given function.
+ */
+function addActionListener(button, action) {
+  button.element.addEventListener("click", action);
+}
 
 /**
  * Adds a change event listener to the given entry that sets the given boolean
@@ -160,7 +203,7 @@ function addBooleanListener(entry, object, key, invert) {
  * Adds a change event listener to the given entry that sets the visibility of
  * the given class word of the given output.
  */
-function addClassListener(entry, output, classs = NUL_STRING, invert) {
+function addClassListener(entry, output, classs, invert) {
   entry.element.addEventListener("change", () => {
     if (setClassWord(output, classs, entry, invert) && !hasAnesthesia()) {
       doAfterModify(entry);

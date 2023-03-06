@@ -1,0 +1,47 @@
+<section>
+  <div class="group">
+    <div id="field-text-word-wrap" class="field switch">
+      <div class="input">
+        <input id="input-text-word-wrap" type="checkbox" />
+      </div>
+      <label for="input-text-word-wrap">Word wrap</label>
+    </div>
+    <div id="field-text-right-to-left" class="field switch">
+      <div class="input">
+        <input id="input-text-right-to-left" type="checkbox" />
+      </div>
+      <label for="input-text-right-to-left">Right to left</label>
+    </div>
+  </div>
+  <div id="field-text-font-family" class="field row">
+    <label for="input-text-font-family">Font family:</label>
+    <div class="input shorter">
+      <select id="input-text-font-family">
+        <option value="serif">Serif</option>
+        <option value="sans-serif">Sans-serif</option>
+        <option value="monospace">Monospace</option>
+      </select>
+    </div>
+  </div>
+  <div id="field-text-font-size" class="field row">
+    <label for="input-text-font-size">Font size:</label>
+    <div class="input short">
+      <input id="input-text-font-size" type="number" min="0" max="15" step="0.01" />
+      <span>em</span>
+    </div>
+  </div>
+  <div id="field-text-line-height" class="field row">
+    <label for="input-text-line-height">Line height:</label>
+    <div class="input short">
+      <input id="input-text-line-height" type="number" min="0" max="15" step="0.01" />
+      <span>×</span>
+    </div>
+  </div>
+</section>
+<section>
+  <div id="field-text-reset" class="field row space-between">
+    <div class="input short">
+      <button id="button-text-reset" type="button">Reset</button>
+    </div>
+  </div>
+</section>

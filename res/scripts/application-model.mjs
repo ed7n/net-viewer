@@ -4,16 +4,16 @@
  * Whenever available, use `application-functions` to operate on the model.
  */
 
-import { NUL_STRING } from "./constants.mjs";
-import { qsAll } from "./functions.mjs";
 import { application as root } from "./roots.mjs";
+import { NUL_STRING } from "./common/constants.mjs";
+import { qsAll } from "./common/functions.mjs";
 import {
   ElementModel,
   FormButton,
   FormEntry,
   MenuButton,
   Output,
-} from "./models.mjs";
+} from "./common/models.mjs";
 
 /** Application model. */
 export const application = Object.freeze({
@@ -31,101 +31,141 @@ export const application = Object.freeze({
   ),
   /** Form buttons. */
   buttons: Object.freeze({
-    close: new MenuButton({ id: "close" }),
+    eject: new MenuButton({ id: "eject" }),
+    filterReset: new FormButton({ id: "filter-reset" }),
     load: new MenuButton({ id: "load" }),
+    mediaReset: new FormButton({ id: "media-reset" }),
     properties: new MenuButton({ id: "properties" }),
     pwa: new MenuButton({ id: "pwa" }),
+    positionReset: new FormButton({ id: "position-reset" }),
     resetControls: new FormButton({ id: "reset-controls" }),
+    searchN05: new FormButton({ id: "search-n05" }),
+    searchN20: new FormButton({ id: "search-n20" }),
+    searchP05: new FormButton({ id: "search-p05" }),
+    searchP20: new FormButton({ id: "search-p20" }),
+    textReset: new FormButton({ id: "text-reset" }),
+    transformReset: new FormButton({ id: "transform-reset" }),
+    viewCollapse: new MenuButton({ id: "view-collapse" }),
+    viewExpand: new MenuButton({ id: "view-expand" }),
   }),
   /** Form entries. */
   entries: Object.freeze({
-    /** Core. */
-    core: Object.freeze({
-      fontFamily: new FormEntry({
-        id: "core-font-family",
-        preset: "monospace",
-      }),
-      fontScale: new FormEntry({
-        id: "core-font-scale",
-        preset: 1,
-      }),
-      lineHeight: new FormEntry({
-        id: "core-line-height",
-        preset: 1.2,
-      }),
-      repeat: new FormEntry({
-        id: "core-repeat",
-        preset: false,
-      }),
-      speed: new FormEntry({
-        id: "core-speed",
-        preset: 1,
-      }),
-      withPitch: new FormEntry({
-        id: "core-with-pitch",
-        preset: true,
-      }),
-      wordWrap: new FormEntry({
-        id: "core-word-wrap",
-        preset: false,
-      }),
-    }),
-    /** Display. */
-    display: Object.freeze({
-      align: new FormEntry({
-        id: "display-align",
-        preset: "center",
-      }),
+    /** Filter. */
+    filter: Object.freeze({
       blur: new FormEntry({
-        id: "display-blur",
+        id: "filter-blur",
         preset: 0,
       }),
       brightness: new FormEntry({
-        id: "display-brightness",
-        preset: 100,
+        id: "filter-brightness",
+        preset: 1,
       }),
       contrast: new FormEntry({
-        id: "display-contrast",
-        preset: 100,
+        id: "filter-contrast",
+        preset: 1,
       }),
       grayscale: new FormEntry({
-        id: "display-grayscale",
+        id: "filter-grayscale",
         preset: 0,
       }),
-      hue: new FormEntry({
-        id: "display-hue",
+      hueRotate: new FormEntry({
+        id: "filter-hue-rotate",
         preset: 0,
       }),
       invert: new FormEntry({
-        id: "display-invert",
+        id: "filter-invert",
         preset: 0,
       }),
-      justify: new FormEntry({
-        id: "display-justify",
-        preset: "center",
-      }),
-      saturation: new FormEntry({
-        id: "display-saturation",
-        preset: 100,
+      saturate: new FormEntry({
+        id: "filter-saturate",
+        preset: 1,
       }),
       sepia: new FormEntry({
-        id: "display-sepia",
+        id: "filter-sepia",
         preset: 0,
+      }),
+    }),
+    /** Media. */
+    media: Object.freeze({
+      autoplay: new FormEntry({
+        id: "media-autoplay",
+        preset: true,
+      }),
+      repeat: new FormEntry({
+        id: "media-repeat",
+        preset: false,
+      }),
+      speed: new FormEntry({
+        id: "media-speed",
+        preset: 1,
+      }),
+      withPitch: new FormEntry({
+        id: "media-with-pitch",
+        preset: true,
       }),
     }),
     /** Menu. */
     menu: Object.freeze({
-      controls: new FormEntry({
-        id: "menu-controls",
+      viewControls: new FormEntry({
+        id: "menu-view-controls",
         preset: false,
       }),
-      forceDark: new FormEntry({
-        id: "menu-force-dark",
+      viewForceDark: new FormEntry({
+        id: "menu-view-force-dark",
         preset: false,
       }),
+      viewReverse: new FormEntry({
+        id: "menu-view-reverse",
+        preset: false,
+      }),
+    }),
+    /** Position. */
+    position: Object.freeze({
+      align: new FormEntry({
+        id: "position-align",
+        preset: "center",
+      }),
+      justify: new FormEntry({
+        id: "position-justify",
+        preset: "center",
+      }),
+    }),
+    /** Text. */
+    text: Object.freeze({
+      fontFamily: new FormEntry({
+        id: "text-font-family",
+        preset: "monospace",
+      }),
+      fontSize: new FormEntry({
+        id: "text-font-size",
+        preset: 1,
+      }),
+      lineHeight: new FormEntry({
+        id: "text-line-height",
+        preset: 1.2,
+      }),
+      rightToLeft: new FormEntry({
+        id: "text-right-to-left",
+        preset: false,
+      }),
+      wordWrap: new FormEntry({
+        id: "text-word-wrap",
+        preset: false,
+      }),
+    }),
+    /** Transform. */
+    transform: Object.freeze({
       reverse: new FormEntry({
-        id: "menu-reverse",
+        id: "transform-reverse",
         preset: false,
+      }),
+      rotate: new FormEntry({
+        id: "transform-rotate",
+        preset: 0,
+      }),
+      scale: new FormEntry({
+        id: "transform-scale",
+        preset: 1,
       }),
     }),
   }),

@@ -1,10 +1,10 @@
 /**
- * Viewer: Edit Actions
+ * NET Application: Edit Actions
  *
  * Functions that the user invokes to edit the current instance.
  */
 
-import { CSS_PREFIX } from "./constants.mjs";
+import { CSS_PREFIX } from "../constants.mjs";
 import { replaceLineEnds } from "./functions.mjs";
 import { getRoot } from "./application-functions.mjs";
 

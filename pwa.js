@@ -17,28 +17,30 @@ const PATH_PAGE = "/net-viewer/";
 /** Site resource path. */
 const PATH_SITE = "https://ed7n.github.io/res/";
 /** Name of the cache to operate on. */
-const CACHE_NAME = "net-viewer-u0r1";
+const CACHE_NAME = "net-viewer-u0r2";
 /** Request URLs whose response is to be cached. */
 const CACHE_URLS = Object.freeze([
   PATH_PAGE + "",
   PATH_PAGE + "pwa",
   PATH_PAGE + "pwa.js",
   PATH_PAGE + "pwa.webmanifest",
+  PATH_PAGE + "res/media/favicon.png",
   PATH_PAGE + "res/scripts/application-functions.mjs",
   PATH_PAGE + "res/scripts/application-model.mjs",
+  PATH_PAGE + "res/scripts/common/application-functions.mjs",
+  PATH_PAGE + "res/scripts/common/constants.mjs",
+  PATH_PAGE + "res/scripts/common/edits.mjs",
+  PATH_PAGE + "res/scripts/common/functions.mjs",
+  PATH_PAGE + "res/scripts/common/models.mjs",
+  PATH_PAGE + "res/scripts/common/views.mjs",
   PATH_PAGE + "res/scripts/constants.mjs",
-  PATH_PAGE + "res/scripts/edits.mjs",
   PATH_PAGE + "res/scripts/events.mjs",
-  PATH_PAGE + "res/scripts/functions.mjs",
   PATH_PAGE + "res/scripts/main.js",
-  PATH_PAGE + "res/scripts/models.mjs",
   PATH_PAGE + "res/scripts/roots.mjs",
   PATH_PAGE + "res/scripts/start.mjs",
   PATH_PAGE + "res/scripts/views.mjs",
   PATH_PAGE + "res/styles/view.css",
   PATH_PAGE + "res/styles/viewer.css",
-  PATH_SITE + "media/favicon-144.png",
-  PATH_SITE + "media/favicon.png",
   PATH_SITE + "media/pwa.png",
   PATH_SITE + "styles/application.css",
   PATH_SITE + "styles/base.css",

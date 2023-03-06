@@ -21,6 +21,7 @@
 }
 
 #output {
+  --viewerRotateY: 0;
   align-items: var(--viewerAlign);
   border-block-end-color: var(--colorAccentHigh);
   border-block-end-style: solid;
@@ -43,16 +44,22 @@
 }
 
 #output > * {
-  filter: hue-rotate(var(--viewerHue)) invert(var(--viewerInvert))
-    saturate(var(--viewerSaturation)) grayscale(var(--viewerGrayscale))
+  filter: hue-rotate(var(--viewerHueRotate)) invert(var(--viewerInvert))
+    saturate(var(--viewerSaturate)) grayscale(var(--viewerGrayscale))
     sepia(var(--viewerSepia)) contrast(var(--viewerContrast))
     brightness(var(--viewerBrightness)) blur(var(--viewerBlur));
   max-height: 100%;
   max-width: 100%;
+  transform: rotateY(var(--viewerRotateY)) rotate(var(--viewerRotate))
+    scale(var(--viewerScale));
 }
 
 #output > .active {
   display: unset;
+}
+
+#output.reverse {
+  --viewerRotateY: 3rad;
 }
 
 #output-audio {
@@ -73,7 +80,7 @@
 #output-nul,
 #output-text {
   font-family: var(--viewerFontFamily);
-  font-size: var(--viewerFontScale);
+  font-size: var(--viewerFontSize);
   line-height: var(--viewerLineHeight);
 }
 
@@ -88,10 +95,15 @@
   border-inline-end-width: var(--widthBorder);
   border-inline-start-color: var(--color);
   border-inline-start-width: var(--widthBorder);
+  direction: ltr;
   overflow: scroll;
   padding: var(--spacer4);
   user-select: text;
   white-space: pre;
+}
+
+#output-text.right-to-left {
+  direction: rtl;
 }
 
 #output-text.word-wrap {

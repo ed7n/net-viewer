@@ -1,0 +1,45 @@
+<section>
+  <div class="group">
+    <div id="field-media-repeat" class="field switch">
+      <div class="input">
+        <input id="input-media-repeat" type="checkbox" />
+      </div>
+      <label for="input-media-repeat">Repeat</label>
+    </div>
+    <div id="field-media-autoplay" class="field switch">
+      <div class="input">
+        <input id="input-media-autoplay" type="checkbox" />
+      </div>
+      <label for="input-media-autoplay">Autoplay</label>
+    </div>
+  </div>
+  <div id="field-media-speed" class="field row">
+    <label for="input-media-speed">Speed:</label>
+    <div class="input shorter">
+      <input id="input-media-speed" type="number" min="0" max="8" step="0.01" />
+      <span>×</span>
+      <div id="field-media-with-pitch" class="field switch">
+        <div class="input">
+          <input id="input-media-with-pitch" type="checkbox" />
+        </div>
+        <label for="input-media-with-pitch">With pitch</label>
+      </div>
+    </div>
+  </div>
+  <div id="field-media-search" class="field row">
+    <label>Search:</label>
+    <div class="input short">
+      <button id="button-search-n05" type="button">⏪&#xFE0E; −05 s</button>
+      <button id="button-search-p05" type="button">+05 s ⏩&#xFE0E;</button>
+      <button id="button-search-n20" type="button">⏪&#xFE0E; −20 s</button>
+      <button id="button-search-p20" type="button">+20 s ⏩&#xFE0E;</button>
+    </div>
+  </div>
+</section>
+<section>
+  <div id="field-media-reset" class="field row space-between">
+    <div class="input short">
+      <button id="button-media-reset" type="button">Reset</button>
+    </div>
+  </div>
+</section>

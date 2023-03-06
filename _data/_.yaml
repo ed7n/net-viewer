@@ -16,7 +16,7 @@ noHeader: true
 noNavPage: true
 noNavSite: true
 pathHome: ""
-pathIcon: "https://ed7n.github.io/res/media/favicon.png"
+pathIcon: "res/media/favicon.png"
 pathRes: "https://ed7n.github.io/res"
 splitSubtitle: ": "
 splitTitle: " - "

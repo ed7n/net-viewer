@@ -2,8 +2,33 @@ NET-Viewer: Changes
 
 —Update 0
 
+——Revision 2, 03/06/2023.
+- `Autoplay`.
+- `Collapse All`.
+- `Expand All`.
+- `Reset` per subsection.
+- `Reverse` transform control.
+- `Right to left`.
+- `Rotate`.
+- `Scale`.
+- `Search`.
+- Application icon.
+- Changed `Font size` unit to em.
+- Grouped controls into accordions.
+- Factored out most parts shared with J-Card Template.
+- Moved `Close` to `Eject`.
+- Moved `Font scale` to `Font size`.
+- Moved `Hue` to `Hue rotate`.
+- Moved `Reverse` to `Reverse Panels`.
+- Moved `Saturation` to `Saturate`.
+- Rearranged view menu items.
+- Restored header, navigation, and footer in NET-Installer.
+- Title-capitalized menu item labels.
+- Tweaked panel width for the column layout.
+- Use factors instead of percentages where sensible.
+
 ——Revision 1, 03/04/2023.
-- `Grayscale`
+- `Grayscale`.
 - `Repeat`.
 - Grouped panel view menu items.
 - Moved application header to panel under About.
