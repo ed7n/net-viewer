@@ -106,6 +106,10 @@ export const application = Object.freeze({
     }),
     /** Menu. */
     menu: Object.freeze({
+      applicationEcc: new FormEntry({
+        id: "menu-application-ecc",
+        preset: false,
+      }),
       viewControls: new FormEntry({
         id: "menu-view-controls",
         preset: false,

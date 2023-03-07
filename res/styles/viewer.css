@@ -50,6 +50,7 @@
     brightness(var(--viewerBrightness)) blur(var(--viewerBlur));
   max-height: 100%;
   max-width: 100%;
+  object-fit: contain;
   transform: rotateY(var(--viewerRotateY)) rotate(var(--viewerRotate))
     scale(var(--viewerScale));
 }

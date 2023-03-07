@@ -1,8 +1,7 @@
 /**
  * Viewer: Event Setup
  *
- * Application event setup. A single call to `setupEvents` makes the magic
- * happen.
+ * A single call to `setupEvents` makes the magic happen.
  */
 
 import {
@@ -17,53 +16,60 @@ import {
   getTransformEntries,
   getView,
 } from "./application-functions.mjs";
-import { NUL_STRING } from "./common/constants.mjs";
 import {
   alertFileProperties,
   reset,
   update,
   getButtons,
-  setModified,
   getOutput,
   getOutputs,
   getReader,
   getRoot,
   getSource,
 } from "./common/application-functions.mjs";
+import * as ECC from "./common/ecc.mjs";
 import {
-  setBooleanProperty,
-  setClassWord,
-  setInnerHtml,
-  setInnerText,
-  setProperty,
-  setSrc,
-  setStyleVariable,
-} from "./common/edits.mjs";
+  OPTIONS_COALESCE,
+  OPTIONS_COALESCE_INVERT,
+  addActionListener,
+  addBooleanListener,
+  addClassListener,
+  addPropertyListener,
+  addStyleVariableListener,
+} from "./common/events.mjs";
 import { collapseAll, expandAll, setForceDark } from "./common/views.mjs";
 
-/** Set post-modification events? */
-let anesthesia = true;
-
-/** Undoes and disables setting of post-modification events. */
-export function induceAnesthesia() {
-  anesthesia = true;
-  setModified(false);
-  window.removeEventListener("beforeunload", doBeforeUnload);
-}
-
-/** Resumes setting of post-modification events. */
-export function removeAnesthesia() {
-  anesthesia = false;
-}
+/** Enable coalescing and append with "deg". */
+const OPTIONS_COALESCE_DEG = Object.freeze({ coalesce: true, suffix: "deg" });
+/** Enable coalescing and append with "em". */
+const OPTIONS_COALESCE_EM = Object.freeze({ coalesce: true, suffix: "em" });
+/** Enable coalescing and append with "%". */
+const OPTIONS_COALESCE_PERCENT = Object.freeze({ coalesce: true, suffix: "%" });
+/** Enable coalescing and append with "px". */
+const OPTIONS_COALESCE_PX = Object.freeze({ coalesce: true, suffix: "px" });
 
 /** Adds event listeners and their handlers to elements. */
 export function setupEvents() {
+  setupApplicationEvents();
   setupButtonEvents();
   setupEntryEvents();
   setupFileEvents();
   setupFormEvents();
   setupWindowEvents();
   setupViewEvents();
+}
+
+/** To be run after modification. */
+export function doAfterModify(entry) {}
+
+/** For use during the window `beforeunload` event. */
+export function doBeforeUnload(event) {}
+
+/** Adds listeners to entries that modify the application. */
+function setupApplicationEvents() {
+  getMenuEntry("applicationEcc").element.addEventListener("change", (event) => {
+    ECC.setBypass(!event.target.checked);
+  });
 }
 
 /** Adds listeners to buttons that invoke actions. */
@@ -121,30 +127,40 @@ function setupEntryEvents() {
   const position = getPositionEntries();
   const text = getTextEntries();
   const transform = getTransformEntries();
-  addClassListener(text.rightToLeft, output.text, "right-to-left");
-  addClassListener(text.wordWrap, output.text, "word-wrap");
-  addClassListener(transform.reverse, output.root, "reverse");
-  addStyleVariableListener(filter, "blur", "px");
-  addStyleVariableListener(filter, "brightness");
-  addStyleVariableListener(filter, "contrast");
-  addStyleVariableListener(filter, "grayscale", "%");
-  addStyleVariableListener(filter, "hueRotate", "deg");
-  addStyleVariableListener(filter, "invert", "%");
-  addStyleVariableListener(filter, "saturate");
-  addStyleVariableListener(filter, "sepia", "%");
-  addStyleVariableListener(position, "align");
-  addStyleVariableListener(position, "justify");
-  addStyleVariableListener(text, "fontFamily");
-  addStyleVariableListener(text, "fontSize", "em");
-  addStyleVariableListener(text, "lineHeight");
-  addStyleVariableListener(transform, "rotate", "deg");
-  addStyleVariableListener(transform, "scale");
+  addClassListener(
+    text.rightToLeft,
+    output.text,
+    "right-to-left",
+    OPTIONS_COALESCE
+  );
+  addClassListener(text.wordWrap, output.text, "word-wrap", OPTIONS_COALESCE);
+  addClassListener(transform.reverse, output.root, "reverse", OPTIONS_COALESCE);
+  addStyleVariableListener(filter, "blur", OPTIONS_COALESCE_PX);
+  addStyleVariableListener(filter, "brightness", OPTIONS_COALESCE);
+  addStyleVariableListener(filter, "contrast", OPTIONS_COALESCE);
+  addStyleVariableListener(filter, "grayscale", OPTIONS_COALESCE_PERCENT);
+  addStyleVariableListener(filter, "hueRotate", OPTIONS_COALESCE_DEG);
+  addStyleVariableListener(filter, "invert", OPTIONS_COALESCE_PERCENT);
+  addStyleVariableListener(filter, "saturate", OPTIONS_COALESCE);
+  addStyleVariableListener(filter, "sepia", OPTIONS_COALESCE_PERCENT);
+  addStyleVariableListener(position, "align", OPTIONS_COALESCE);
+  addStyleVariableListener(position, "justify", OPTIONS_COALESCE);
+  addStyleVariableListener(text, "fontFamily", OPTIONS_COALESCE);
+  addStyleVariableListener(text, "fontSize", OPTIONS_COALESCE_EM);
+  addStyleVariableListener(text, "lineHeight", OPTIONS_COALESCE);
+  addStyleVariableListener(transform, "rotate", OPTIONS_COALESCE_DEG);
+  addStyleVariableListener(transform, "scale", OPTIONS_COALESCE);
   ["audio", "video"].forEach((key) => {
     const element = output[key].element;
     addBooleanListener(media.autoplay, element, "autoplay");
     addBooleanListener(media.repeat, element, "loop");
-    addBooleanListener(media.withPitch, element, "preservesPitch", true);
-    addPropertyListener(media.speed, element, "playbackRate");
+    addBooleanListener(
+      media.withPitch,
+      element,
+      "preservesPitch",
+      OPTIONS_COALESCE_INVERT
+    );
+    addPropertyListener(media.speed, element, "playbackRate", OPTIONS_COALESCE);
   });
 }
 
@@ -168,9 +184,11 @@ function setupFileEvents() {
 /** Adds listeners to entries that update entries. */
 function setupFormEvents() {}
 
-/** Adds listeners to entries that modifies the view. */
+/** Adds listeners to entries that modify the view. */
 function setupViewEvents() {
-  addClassListener(getMenuEntry("viewControls"), getRoot(), "no-panels", true);
+  addClassListener(getMenuEntry("viewControls"), getRoot(), "no-panels", {
+    invert: true,
+  });
   addClassListener(getMenuEntry("viewReverse"), getRoot(), "reverse");
   getMenuEntry("viewForceDark").element.addEventListener("change", (event) => {
     setForceDark(event.target.checked);
@@ -179,126 +197,3 @@ function setupViewEvents() {
 
 /** Adds listeners to the window. */
 function setupWindowEvents() {}
-
-/**
- * Adds a click event listener to the given button that runs the given function.
- */
-function addActionListener(button, action) {
-  button.element.addEventListener("click", action);
-}
-
-/**
- * Adds a change event listener to the given entry that sets the given boolean
- * property.
- */
-function addBooleanListener(entry, object, key, invert) {
-  entry.element.addEventListener("change", () => {
-    if (setBooleanProperty(entry, object, key, invert) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/**
- * Adds a change event listener to the given entry that sets the visibility of
- * the given class word of the given output.
- */
-function addClassListener(entry, output, classs, invert) {
-  entry.element.addEventListener("change", () => {
-    if (setClassWord(output, classs, entry, invert) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/**
- * Adds an input event listener to the given entry that sets the inner HTML of
- * the given output.
- */
-function addHtmlListener(entry, output) {
-  entry.element.addEventListener("input", () => {
-    if (setInnerHtml(output, entry) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/**
- * Adds an input event listener to the given entry that sets the given property.
- */
-function addPropertyListener(entry, object, key) {
-  entry.element.addEventListener("input", () => {
-    if (setProperty(entry, object, key) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/**
- * Adds a change event listener to the given entry that sets the source of the
- * given output.
- */
-function addSrcListener(entry, output) {
-  entry.element.addEventListener("change", () => {
-    if (setSrc(output, entry) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/**
- * Adds an input event listener to the given entry that sets the given style of
- * the given output.
- */
-function addStyleListener(
-  entry,
-  output,
-  style = NUL_STRING,
-  suffix = NUL_STRING
-) {
-  entry.element.addEventListener("input", () => {
-    if (setStyle(output, style, entry, suffix) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/**
- * Adds an input event listener to the given entry by its key that sets the
- * given style variable of the application root element by the same key.
- */
-function addStyleVariableListener(
-  entries,
-  key = NUL_STRING,
-  suffix = NUL_STRING
-) {
-  const entry = entries[key];
-  entry.element.addEventListener("input", () => {
-    if (setStyleVariable(key, entry, suffix) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/**
- * Adds an input event listener to the given entry that sets the inner text of
- * the given output.
- */
-function addTextListener(entry, output) {
-  entry.element.addEventListener("input", () => {
-    if (setInnerText(output, entry) && !hasAnesthesia()) {
-      doAfterModify(entry);
-    }
-  });
-}
-
-/** To be run after modification. */
-function doAfterModify(entry) {}
-
-/** For use during the window `beforeunload` event. */
-function doBeforeUnload(event) {}
-
-/** Returns whether it is setting post-modification events. */
-function hasAnesthesia() {
-  return anesthesia;
-}

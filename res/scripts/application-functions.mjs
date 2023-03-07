@@ -8,7 +8,11 @@
 import { FILE_SIZE_MAX_SAFE, MESSAGES } from "./constants.mjs";
 import { application } from "./application-model.mjs";
 import { activateView, deactivateView } from "./views.mjs";
-import { NUL_STRING, EVENT_INPUT } from "./common/constants.mjs";
+import {
+  NUL_STRING,
+  EVENT_INPUT,
+  MESSAGES as COMMON_MESSAGES,
+} from "./common/constants.mjs";
 import { testFile, setWindowSubtitle } from "./common/functions.mjs";
 import {
   getControl,
@@ -65,7 +69,7 @@ export function loadFile(files = getSource().valueOrPreset, index = 0) {
       return (application.instance.file = file);
     }
   } else {
-    alert(MESSAGES.loadEmpty);
+    alert(COMMON_MESSAGES.loadEmpty);
   }
   getSource().element.disabled = false;
 }

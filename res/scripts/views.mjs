@@ -1,7 +1,7 @@
 /**
  * Viewer: View Actions
  *
- * Functions that modify the view.
+ * Functions modifying the view.
  */
 
 import { getOutput } from "./common/application-functions.mjs";

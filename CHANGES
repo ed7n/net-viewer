@@ -2,6 +2,12 @@ NET-Viewer: Changes
 
 —Update 0
 
+——Revision 3, 03/07/2023.
+- Edited application icon.
+- Event Condensing Coalescer (ECC).
+- Factored out more parts shared with J-Card Template.
+- Fixed overstretched output with align set to `Stretch`.
+
 ——Revision 2, 03/06/2023.
 - `Autoplay`.
 - `Collapse All`.
