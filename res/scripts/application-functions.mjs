@@ -82,6 +82,13 @@ export function loadReader() {
   getSource().element.disabled = false;
 }
 
+/** Loads the given URL into the frame output. */
+export function loadUrl(url) {
+  unloadView();
+  loadView("frame");
+  getOutput("frame").element.src = url;
+}
+
 /** Loads the given output view by its key. */
 export function loadView(key) {
   activateView(key);
@@ -119,6 +126,16 @@ export function getFilterEntry(key = NUL_STRING) {
 /** Returns filter form entries. */
 export function getFilterEntries() {
   return application.entries.filter;
+}
+
+/** Returns the given frame form entry by its key. */
+export function getFrameEntry(key = NUL_STRING) {
+  return getControl(getFrameEntries, key);
+}
+
+/** Returns frame form entries. */
+export function getFrameEntries() {
+  return application.entries.frame;
 }
 
 /** Returns the given media form entry by its key. */

@@ -9,6 +9,7 @@ import { NUL_STRING } from "./common/constants.mjs";
 /** Messages. */
 export const MESSAGES = Object.freeze({
   loadLarge: "Its size is greater than 1 MiB, proceed with loading?",
+  loadUrl: "Enter its complete form, including scheme and path.",
 });
 /** CSS custom property prefix. */
 export const CSS_PREFIX = "viewer";

@@ -4,11 +4,16 @@
  * A single call to `setupEvents` makes the magic happen.
  */
 
+import { MESSAGES } from "./constants.mjs";
 import {
   close,
   loadFile,
   loadReader,
+  loadUrl,
   getFilterEntries,
+  getFrameEntry,
+  getFrameEntries,
+  getMediaEntry,
   getMediaEntries,
   getMenuEntry,
   getPositionEntries,
@@ -16,6 +21,8 @@ import {
   getTransformEntries,
   getView,
 } from "./application-functions.mjs";
+import { MESSAGES as COMMON_MESSAGES } from "./common/constants.mjs";
+import { getInputSafeValue } from "./common/functions.mjs";
 import {
   alertFileProperties,
   reset,
@@ -31,6 +38,7 @@ import * as ECC from "./common/ecc.mjs";
 import {
   OPTIONS_COALESCE,
   OPTIONS_COALESCE_INVERT,
+  OPTIONS_INVERT,
   addActionListener,
   addBooleanListener,
   addClassListener,
@@ -55,6 +63,7 @@ export function setupEvents() {
   setupEntryEvents();
   setupFileEvents();
   setupFormEvents();
+  setupOutputEvents();
   setupWindowEvents();
   setupViewEvents();
 }
@@ -63,12 +72,16 @@ export function setupEvents() {
 export function doAfterModify(entry) {}
 
 /** For use during the window `beforeunload` event. */
-export function doBeforeUnload(event) {}
+export function doBeforeUnload(event) {
+  event.preventDefault();
+  event.returnValue = COMMON_MESSAGES.windowUnload;
+  return COMMON_MESSAGES.windowUnload;
+}
 
 /** Adds listeners to entries that modify the application. */
 function setupApplicationEvents() {
   getMenuEntry("applicationEcc").element.addEventListener("change", (event) => {
-    ECC.setBypass(!event.target.checked);
+    ECC.setBypass(!getInputSafeValue(event.target));
   });
 }
 
@@ -77,43 +90,58 @@ function setupButtonEvents() {
   const buttons = getButtons();
   const controls = [
     getFilterEntries,
+    getFrameEntries,
     getMediaEntries,
     getPositionEntries,
     getTextEntries,
     getTransformEntries,
   ];
-  addActionListener(buttons.eject, close);
-  addActionListener(buttons.load, () => getSource().element.click());
-  addActionListener(buttons.properties, alertFileProperties);
-  addActionListener(buttons.pwa, () => location.assign("pwa"));
-  addActionListener(buttons.resetControls, () => {
-    reset(controls);
-    update(controls);
+  addActionListener(buttons.applicationPwa, () => {
+    if (getView() === "nul" || confirm(COMMON_MESSAGES.windowUnload)) {
+      location.assign("pwa");
+    }
   });
+  addActionListener(buttons.fileEject, close);
+  addActionListener(buttons.fileLoad, () => getSource().element.click());
+  addActionListener(buttons.fileLoadUrl, () => {
+    const response = prompt(MESSAGES.loadUrl, getOutput("frame").element.src);
+    if (response && response.length) {
+      loadUrl(response);
+    }
+  });
+  addActionListener(buttons.fileProperties, alertFileProperties);
   [
     ["filter", getFilterEntries],
+    ["frame", getFrameEntries],
     ["media", getMediaEntries],
     ["position", getPositionEntries],
     ["text", getTextEntries],
     ["transform", getTransformEntries],
   ].forEach(([key, getter]) => {
+    getter = [getter];
     addActionListener(buttons[key + "Reset"], () => {
-      reset([getter]);
-      update([getter]);
+      reset(getter);
+      update(getter);
     });
   });
   [
-    ["searchN05", -5],
-    ["searchN20", -20],
-    ["searchP05", 5],
-    ["searchP20", 20],
+    ["N05", -5],
+    ["N20", -20],
+    ["P05", 5],
+    ["P20", 20],
   ].forEach(([key, operand]) => {
-    addActionListener(buttons[key], () => {
+    addActionListener(buttons["mediaSearch" + key], () => {
       const view = getView();
-      if (view === "audio" || view === "video") {
-        getOutput(view).element.currentTime += operand;
+      switch (view) {
+        case "audio":
+        case "video":
+          getOutput(view).element.currentTime += operand;
       }
     });
+  });
+  addActionListener(buttons.resetControls, () => {
+    reset(controls);
+    update(controls);
   });
   addActionListener(buttons.viewCollapse, collapseAll);
   addActionListener(buttons.viewExpand, expandAll);
@@ -127,6 +155,7 @@ function setupEntryEvents() {
   const position = getPositionEntries();
   const text = getTextEntries();
   const transform = getTransformEntries();
+  addClassListener(getFrameEntry("solid"), output.frame, "solid");
   addClassListener(
     text.rightToLeft,
     output.text,
@@ -177,21 +206,45 @@ function setupFileEvents() {
     }
   });
   getSource().element.addEventListener("change", (event) => {
-    loadFile(event.target.files);
+    loadFile(getInputSafeValue(event.target));
   });
 }
 
 /** Adds listeners to entries that update entries. */
 function setupFormEvents() {}
 
+/* Adds listeners to outputs. */
+function setupOutputEvents() {
+  const doLoadedMetadata = (event) => {
+    if (event.target.autoplay) {
+      event.target.play();
+    }
+  };
+  const speed = getMediaEntry("speed");
+  const doRateChange = (event) => {
+    const playbackRate = event.target.playbackRate;
+    if (playbackRate !== parseFloat(speed.valueOrPreset)) {
+      speed.value = playbackRate;
+    }
+  };
+  ["audio", "video"].forEach((key) => {
+    const element = getOutput(key).element;
+    element.addEventListener("loadedmetadata", doLoadedMetadata);
+    element.addEventListener("ratechange", doRateChange);
+  });
+}
+
 /** Adds listeners to entries that modify the view. */
 function setupViewEvents() {
-  addClassListener(getMenuEntry("viewControls"), getRoot(), "no-panels", {
-    invert: true,
-  });
+  addClassListener(
+    getMenuEntry("viewControls"),
+    getRoot(),
+    "no-panels",
+    OPTIONS_INVERT
+  );
   addClassListener(getMenuEntry("viewReverse"), getRoot(), "reverse");
   getMenuEntry("viewForceDark").element.addEventListener("change", (event) => {
-    setForceDark(event.target.checked);
+    setForceDark(getInputSafeValue(event.target));
   });
 }
 

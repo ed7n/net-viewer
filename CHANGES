@@ -2,8 +2,19 @@ NET-Viewer: Changes
 
 —Update 0
 
+——Revision 4, 03/08/2023.
+- `Load URL`.
+- `Solid`.
+- Brightened application icon.
+- Explicit autoplay.
+- Fixed ECC timeout operations on drain and flush.
+- Moved `Eject` to menu bottom.
+- Prompt on loaded file with `Offline Access`.
+- `Speed` value follows those of media elements.
+- Updated NET-Installer.
+
 ——Revision 3, 03/07/2023.
-- Edited application icon.
+- Cleaned up application icon.
 - Event Condensing Coalescer (ECC).
 - Factored out more parts shared with J-Card Template.
 - Fixed overstretched output with align set to `Stretch`.

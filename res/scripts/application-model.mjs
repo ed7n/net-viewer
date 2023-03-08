@@ -31,18 +31,20 @@ export const application = Object.freeze({
   ),
   /** Form buttons. */
   buttons: Object.freeze({
-    eject: new MenuButton({ id: "eject" }),
+    applicationPwa: new MenuButton({ id: "application-pwa" }),
+    fileEject: new MenuButton({ id: "file-eject" }),
+    fileLoad: new MenuButton({ id: "file-load" }),
+    fileLoadUrl: new MenuButton({ id: "file-load-url" }),
+    fileProperties: new MenuButton({ id: "file-properties" }),
     filterReset: new FormButton({ id: "filter-reset" }),
-    load: new MenuButton({ id: "load" }),
+    frameReset: new FormButton({ id: "frame-reset" }),
     mediaReset: new FormButton({ id: "media-reset" }),
-    properties: new MenuButton({ id: "properties" }),
-    pwa: new MenuButton({ id: "pwa" }),
+    mediaSearchN05: new FormButton({ id: "media-search-n05" }),
+    mediaSearchN20: new FormButton({ id: "media-search-n20" }),
+    mediaSearchP05: new FormButton({ id: "media-search-p05" }),
+    mediaSearchP20: new FormButton({ id: "media-search-p20" }),
     positionReset: new FormButton({ id: "position-reset" }),
     resetControls: new FormButton({ id: "reset-controls" }),
-    searchN05: new FormButton({ id: "search-n05" }),
-    searchN20: new FormButton({ id: "search-n20" }),
-    searchP05: new FormButton({ id: "search-p05" }),
-    searchP20: new FormButton({ id: "search-p20" }),
     textReset: new FormButton({ id: "text-reset" }),
     transformReset: new FormButton({ id: "transform-reset" }),
     viewCollapse: new MenuButton({ id: "view-collapse" }),
@@ -83,6 +85,12 @@ export const application = Object.freeze({
       sepia: new FormEntry({
         id: "filter-sepia",
         preset: 0,
+      }),
+    }),
+    frame: Object.freeze({
+      solid: new FormEntry({
+        id: "frame-solid",
+        preset: false,
       }),
     }),
     /** Media. */
