@@ -2,6 +2,13 @@ NET-Viewer: Changes
 
 —Update 0
 
+——Revision 5, 03/17/2023.
+- `Show Controls` to show media controls.
+- Apply URL parameter hooks after initial update.
+- Core action buttons span container width.
+- Note that URL resources are to be handled by the frame core.
+- Reset frame core after ejecting its file.
+
 ——Revision 4, 03/08/2023.
 - `Load URL`.
 - `Solid`.

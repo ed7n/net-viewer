@@ -64,8 +64,8 @@ export function setupEvents() {
   setupFileEvents();
   setupFormEvents();
   setupOutputEvents();
-  setupWindowEvents();
   setupViewEvents();
+  setupWindowEvents();
 }
 
 /** To be run after modification. */
@@ -97,8 +97,15 @@ function setupButtonEvents() {
     getTransformEntries,
   ];
   addActionListener(buttons.applicationPwa, () => {
-    if (getView() === "nul" || confirm(COMMON_MESSAGES.windowUnload)) {
-      location.assign("pwa");
+    switch (getView()) {
+      case "frame":
+      case "nul":
+        location.assign("pwa");
+        break;
+      default:
+        if (confirm(COMMON_MESSAGES.windowUnload)) {
+          location.assign("pwa");
+        }
     }
   });
   addActionListener(buttons.fileEject, close);
@@ -138,6 +145,10 @@ function setupButtonEvents() {
           getOutput(view).element.currentTime += operand;
       }
     });
+  });
+  addActionListener(buttons.mediaShowControls, () => {
+    getOutput("audio").element.controls = true;
+    getOutput("video").element.controls = true;
   });
   addActionListener(buttons.resetControls, () => {
     reset(controls);

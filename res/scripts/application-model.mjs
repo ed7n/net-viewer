@@ -43,6 +43,7 @@ export const application = Object.freeze({
     mediaSearchN20: new FormButton({ id: "media-search-n20" }),
     mediaSearchP05: new FormButton({ id: "media-search-p05" }),
     mediaSearchP20: new FormButton({ id: "media-search-p20" }),
+    mediaShowControls: new FormButton({ id: "media-show-controls" }),
     positionReset: new FormButton({ id: "position-reset" }),
     resetControls: new FormButton({ id: "reset-controls" }),
     textReset: new FormButton({ id: "text-reset" }),

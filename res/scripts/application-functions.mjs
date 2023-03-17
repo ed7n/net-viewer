@@ -7,6 +7,7 @@
 
 import { FILE_SIZE_MAX_SAFE, MESSAGES } from "./constants.mjs";
 import { application } from "./application-model.mjs";
+import { doBeforeUnload } from "./events.mjs";
 import { activateView, deactivateView } from "./views.mjs";
 import {
   NUL_STRING,
@@ -48,9 +49,9 @@ export function loadFile(files = getSource().valueOrPreset, index = 0) {
           type = file.type.slice(0, file.type.indexOf("/")).toLowerCase();
       }
       switch (type) {
+        case "audio":
         case "frame":
         case "image":
-        case "audio":
         case "video":
           prepareOutput(file.name, type);
           getOutput(type).element.src = URL.createObjectURL(file);
@@ -91,26 +92,33 @@ export function loadUrl(url) {
 
 /** Loads the given output view by its key. */
 export function loadView(key) {
+  const element = getOutput(key).element;
   activateView(key);
-  getOutput(key).element.focus();
+  if (key === "frame") {
+    window.addEventListener("beforeunload", doBeforeUnload);
+    getOutput("root").element.appendChild(element);
+  }
+  element.focus();
   application.instance.view = key;
 }
 
 /** Unloads the given output view by its key. */
 export function unloadView(key = getView()) {
+  const element = getOutput(key).element;
   switch (key) {
-    case "audio":
     case "frame":
+      element.remove();
+      window.removeEventListener("beforeunload", doBeforeUnload);
+    case "audio":
     case "image":
     case "video":
-      const element = getOutput(key).element;
       if (element.src) {
         URL.revokeObjectURL(element.src);
       }
       element.src = NUL_STRING;
       break;
     case "text":
-      getOutput(key).element.innerText = NUL_STRING;
+      element.innerText = NUL_STRING;
       break;
   }
   setWindowSubtitle();

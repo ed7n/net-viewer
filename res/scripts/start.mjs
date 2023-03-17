@@ -6,9 +6,33 @@
 
 import { loadView, getMenuEntry } from "./application-functions.mjs";
 import { setupEvents } from "./events.mjs";
+import { EVENT_CHANGE } from "./common/constants.mjs";
 import { reset, update, getEntries } from "./common/application-functions.mjs";
 
-const parameters = new URLSearchParams(location.search);
+const PARAMS = Object.freeze({
+  controls: Object.freeze({
+    getter: getMenuEntry,
+    key: "viewControls",
+    value: true,
+  }),
+  dark: Object.freeze({
+    getter: getMenuEntry,
+    key: "viewForceDark",
+    value: true,
+  }),
+  ecc: Object.freeze({
+    getter: getMenuEntry,
+    key: "applicationEcc",
+    value: true,
+  }),
+  reverse: Object.freeze({
+    getter: getMenuEntry,
+    key: "viewReverse",
+    value: true,
+  }),
+});
+
+const argumentss = new URLSearchParams(location.search);
 
 setupEvents();
 Object.values(getEntries())
@@ -17,14 +41,12 @@ Object.values(getEntries())
     entry.element.placeholder = entry.preset;
   });
 reset();
-if (parameters.has("controls")) {
-  getMenuEntry("viewControls").value = true;
-}
-if (parameters.has("dark")) {
-  getMenuEntry("viewForceDark").value = true;
-}
-if (parameters.has("ecc")) {
-  getMenuEntry("ecc").value = true;
-}
 update();
+Object.entries(PARAMS).forEach(([argument, handle]) => {
+  if (argumentss.has(argument)) {
+    const entry = handle.getter(handle.key);
+    entry.value = handle.value;
+    entry.element.dispatchEvent(EVENT_CHANGE);
+  }
+});
 loadView("nul");

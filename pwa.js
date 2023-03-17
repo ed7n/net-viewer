@@ -19,7 +19,7 @@ const PATH_SITE = "https://ed7n.github.io/res/";
 /** Cache base name. Do not change this. */
 const CACHE_BASE = "net-viewer";
 /** Cache unique identification. Change this on versioning. */
-const CACHE_UNID = "u0r4";
+const CACHE_UNID = "u0r5";
 /** Name of the cache to operate on. */
 const CACHE_NAME = CACHE_BASE + "_" + CACHE_UNID;
 /** Request URLs whose response is to be cached. */
