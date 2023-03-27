@@ -2,6 +2,14 @@ NET-Viewer: Changes
 
 —Update 0
 
+——Revision 6, 03/19/2023.
+- Close all core control accordions by default.
+- Extended input reach except for checkboxes.
+- Moved all unit suffixes to label.
+- Moved `Font size` suffix to '×'.
+  - Alternative denotation.
+- Note on filter order.
+
 ——Revision 5, 03/17/2023.
 - `Show Controls` to show media controls.
 - Apply URL parameter hooks after initial update.
