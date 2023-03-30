@@ -67,7 +67,10 @@ export class FormEntry extends FormControl {
   /** To be run after setting its value. */
   onAfterSetValue() {
     if (this.element.checkValidity && this.element.checkValidity()) {
-      this.lkg = this.value;
+      const out = this.value;
+      if (out !== NUL_STRING) {
+        this.lkg = out;
+      }
     }
   }
 
