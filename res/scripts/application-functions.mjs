@@ -34,7 +34,7 @@ export function close() {
  * Loads the file at the given index of the given list. If successful, then this
  * may be followed by `loadReader`.
  */
-export function loadFile(files = getSource().valueOrPreset, index = 0) {
+export function loadFile(files = getSource().value, index = 0) {
   getSource().element.disabled = true;
   if (files.length) {
     const file = files[index];

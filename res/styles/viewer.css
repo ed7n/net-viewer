@@ -21,6 +21,7 @@
 }
 
 #output {
+  --viewerRotateX: 0;
   --viewerRotateY: 0;
   align-items: var(--viewerAlign);
   border-block-end-color: var(--colorAccentHigh);
@@ -51,16 +52,20 @@
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
-  transform: rotateY(var(--viewerRotateY)) rotate(var(--viewerRotate))
-    scale(var(--viewerScale));
+  transform: rotateX(var(--viewerRotateX)) rotateY(var(--viewerRotateY))
+    rotateZ(var(--viewerRotate)) scale(var(--viewerScale));
 }
 
 #output > .active {
   display: unset;
 }
 
+#output.invert {
+  --viewerRotateX: 180deg;
+}
+
 #output.reverse {
-  --viewerRotateY: 3rad;
+  --viewerRotateY: 180deg;
 }
 
 #output-audio {

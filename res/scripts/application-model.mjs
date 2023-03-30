@@ -168,6 +168,10 @@ export const application = Object.freeze({
     }),
     /** Transform. */
     transform: Object.freeze({
+      invert: new FormEntry({
+        id: "transform-invert",
+        preset: false,
+      }),
       reverse: new FormEntry({
         id: "transform-reverse",
         preset: false,

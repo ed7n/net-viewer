@@ -151,8 +151,10 @@ function setupButtonEvents() {
     getOutput("video").element.controls = true;
   });
   addActionListener(buttons.resetControls, () => {
-    reset(controls);
-    update(controls);
+    if (confirm(MESSAGES.resetControls)) {
+      reset(controls);
+      update(controls);
+    }
   });
   addActionListener(buttons.viewCollapse, collapseAll);
   addActionListener(buttons.viewExpand, expandAll);
@@ -174,6 +176,7 @@ function setupEntryEvents() {
     OPTIONS_COALESCE
   );
   addClassListener(text.wordWrap, output.text, "word-wrap", OPTIONS_COALESCE);
+  addClassListener(transform.invert, output.root, "invert", OPTIONS_COALESCE);
   addClassListener(transform.reverse, output.root, "reverse", OPTIONS_COALESCE);
   addStyleVariableListener(filter, "blur", OPTIONS_COALESCE_PX);
   addStyleVariableListener(filter, "brightness", OPTIONS_COALESCE);
@@ -234,7 +237,7 @@ function setupOutputEvents() {
   const speed = getMediaEntry("speed");
   const doRateChange = (event) => {
     const playbackRate = event.target.playbackRate;
-    if (playbackRate !== parseFloat(speed.valueOrPreset)) {
+    if (playbackRate !== parseFloat(speed.valueOrLkgOrPreset)) {
       speed.value = playbackRate;
     }
   };

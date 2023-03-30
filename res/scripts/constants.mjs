@@ -12,6 +12,7 @@ export const MESSAGES = Object.freeze({
   loadUrl:
     "To be handled by the frame core.\n\n" +
     "Enter a complete URL, including scheme and path.",
+  resetControls: "Reset all core and display controls to our defaults?",
 });
 /** CSS custom property prefix. */
 export const CSS_PREFIX = "viewer";

@@ -2,9 +2,16 @@ NET-Viewer: Changes
 
 —Update 0
 
+——Revision 7, 03/30/2023.
+- `Invert`.
+- Fixed `Reverse` angle.
+- Note that display controls do not apply to fullscreen media.
+- Updated NET-Installer.
+- Use last known valid value for invalid but empty entries.
+
 ——Revision 6, 03/19/2023.
 - Close all core control accordions by default.
-- Extended input reach except for checkboxes.
+- Extended entry reach except for checkboxes.
 - Moved all unit suffixes to label.
 - Moved `Font size` suffix to '×'.
   - Alternative denotation.

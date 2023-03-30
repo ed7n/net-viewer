@@ -1,20 +1,30 @@
 <section>
-  <div class="field switch" id="field-transform-reverse">
-    <div class="input">
-      <input id="input-transform-reverse" type="checkbox" />
+  <div class="group">
+    <div class="field switch" id="field-transform-reverse">
+      <div class="input">
+        <input id="input-transform-reverse" type="checkbox" />
+      </div>
+      <label for="input-transform-reverse">Reverse</label>
     </div>
-    <label for="input-transform-reverse">Reverse</label>
-  </div>
-  <div class="field row" id="field-transform-rotate">
-    <label for="input-transform-rotate">Rotate (°):</label>
-    <div class="input shorter">
-      <input id="input-transform-rotate" type="number" min="-360" max="360" />
+    <div class="field switch" id="field-transform-invert">
+      <div class="input">
+        <input id="input-transform-invert" type="checkbox" />
+      </div>
+      <label for="input-transform-invert">Invert</label>
     </div>
   </div>
-  <div class="field row" id="field-transform-scale">
-    <label for="input-transform-scale">Scale (×):</label>
-    <div class="input shorter">
-      <input id="input-transform-scale" type="number" min="0" max="15" step="0.01" />
+  <div class="group">
+    <div class="field row small" id="field-transform-rotate">
+      <label for="input-transform-rotate">Rotate (°):</label>
+      <div class="input shorter">
+        <input id="input-transform-rotate" type="number" min="-360" max="360" />
+      </div>
+    </div>
+    <div class="field row small" id="field-transform-scale">
+      <label for="input-transform-scale">Scale (×):</label>
+      <div class="input shorter">
+        <input id="input-transform-scale" type="number" min="0" max="15" step="0.01" />
+      </div>
     </div>
   </div>
 </section>
