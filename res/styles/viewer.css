@@ -80,7 +80,7 @@
 }
 
 #output-frame {
-  /* firefox */
+  /* Firefox. */
   border: unset;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .colors > :not(:last-child) {
-  margin-inline-end: calc(var(--spacer) / 2);
+  margin-inline-end: var(--spacer05);
 }
 
 .colors > .blue {

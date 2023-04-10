@@ -1,63 +1,20 @@
 /**
- * NET Self-service Worker u0r3 by Brendon, 03/30/2023.
+ * NET-Installer: Self-service Worker.
  *
- * Self-registering service worker for progressive web applications.
- *
- * Get your list of assets with:
- *
- * $ find . -type f -printf '  PATH_PAGE + "%P",'$'\n' | sort
- *
- * then modify it as needed.
+ * Self-registering service worker for progressive web applications. It requires
+ * the assets attachment to work.
  */
 
 "use strict";
 
-/** Page index path. */
-const PATH_PAGE = "/net-viewer/";
-/** Site resource path. */
-const PATH_SITE = "https://ed7n.github.io/res/";
+/** Assets attachment path. */
+const PATH_ASSETS = "res/scripts/pwa-assets.js";
 /** Cache base name. Do not change this. */
 const CACHE_BASE = "net-viewer";
 /** Cache unique identification. Change this on versioning. */
-const CACHE_UNID = "u0r7";
+const CACHE_UNID = "u0r8-1";
 /** Name of the cache to operate on. */
 const CACHE_NAME = CACHE_BASE + "_" + CACHE_UNID;
-/** Request URLs whose response is to be cached. */
-const CACHE_URLS = Object.freeze([
-  PATH_PAGE + "",
-  PATH_PAGE + "pwa",
-  PATH_PAGE + "pwa.js",
-  PATH_PAGE + "pwa.webmanifest",
-  PATH_PAGE + "res/media/favicon.png",
-  PATH_PAGE + "res/scripts/application-functions.mjs",
-  PATH_PAGE + "res/scripts/application-model.mjs",
-  PATH_PAGE + "res/scripts/common/application-functions.mjs",
-  PATH_PAGE + "res/scripts/common/constants.mjs",
-  PATH_PAGE + "res/scripts/common/ecc.mjs",
-  PATH_PAGE + "res/scripts/common/edits.mjs",
-  PATH_PAGE + "res/scripts/common/events.mjs",
-  PATH_PAGE + "res/scripts/common/functions.mjs",
-  PATH_PAGE + "res/scripts/common/models.mjs",
-  PATH_PAGE + "res/scripts/common/views.mjs",
-  PATH_PAGE + "res/scripts/constants.mjs",
-  PATH_PAGE + "res/scripts/events.mjs",
-  PATH_PAGE + "res/scripts/main.js",
-  PATH_PAGE + "res/scripts/roots.mjs",
-  PATH_PAGE + "res/scripts/start.mjs",
-  PATH_PAGE + "res/scripts/views.mjs",
-  PATH_PAGE + "res/styles/view.css",
-  PATH_PAGE + "res/styles/viewer.css",
-  PATH_SITE + "media/pwa.png",
-  PATH_SITE + "styles/application.css",
-  PATH_SITE + "styles/base.css",
-  PATH_SITE + "styles/document.css",
-  PATH_SITE + "styles/form.css",
-  PATH_SITE + "styles/header-footer.css",
-  PATH_SITE + "styles/input.css",
-  PATH_SITE + "styles/layout.css",
-  PATH_SITE + "styles/nav.css",
-  PATH_SITE + "styles/una-menu.css",
-]);
 
 if (self.toString().includes("Window")) {
   const action = document.querySelector("#action");
@@ -114,6 +71,7 @@ if (self.toString().includes("Window")) {
     status.innerHTML = "(" + String(container) + ")";
   }
 } else if (self.toString().includes("ServiceWorkerGlobalScope")) {
+  importScripts(PATH_ASSETS);
   self.addEventListener("install", (event) => {
     event.waitUntil(
       (async () => {
@@ -121,7 +79,6 @@ if (self.toString().includes("Window")) {
       })()
     );
   });
-
   self.addEventListener("fetch", (event) => {
     const request = event.request;
     event.respondWith(
@@ -140,7 +97,6 @@ if (self.toString().includes("Window")) {
       })()
     );
   });
-
   self.addEventListener("activate", (event) => {
     event.waitUntil(
       caches.keys().then((keys) => {

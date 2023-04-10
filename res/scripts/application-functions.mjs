@@ -126,6 +126,32 @@ export function unloadView(key = getView()) {
   application.instance.file = null;
 }
 
+/** Multiplies the audio and video cores' speed by the given factor. */
+export function doScan(factor = 1) {
+  const entry = getMediaEntry("speed");
+  if (!entry.element.disabled) {
+    entry.element.disabled = true;
+    let speed = entry.valueOrLkgOrPreset;
+    application.instance.scanBaseSpeed = speed;
+    speed = Math.min(entry.element.max, speed * factor);
+    entry.value = speed;
+    getOutput("audio").element.playbackRate = speed;
+    getOutput("video").element.playbackRate = speed;
+  }
+}
+
+/** Undoes `doScan`; restores the audio and video cores' speed. */
+export function undoScan() {
+  const entry = getMediaEntry("speed");
+  if (entry.element.disabled) {
+    const speed = application.instance.scanBaseSpeed;
+    entry.value = speed;
+    getOutput("audio").element.playbackRate = speed;
+    getOutput("video").element.playbackRate = speed;
+    entry.element.disabled = false;
+  }
+}
+
 /** Returns the given filter form entry by its key. */
 export function getFilterEntry(key = NUL_STRING) {
   return getControl(getFilterEntries, key);

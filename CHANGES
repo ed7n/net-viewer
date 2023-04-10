@@ -2,6 +2,15 @@ NET-Viewer: Changes
 
 —Update 0
 
+——Revision 8, 04/04/2023.
+- `Hold scan`.
+- Cleaned up `Jump` button labels.
+  - Icon followed by text with no leading zeros.
+- Moved `Search` to `Jump`.
+- `Offline Access` opens on a blank browsing context.
+- Replaced triangular icons on `Jump` button labels with arrows.
+- Updated NET-Installer.
+
 ——Revision 7, 03/30/2023.
 - `Invert`.
 - Fixed `Reverse` angle.

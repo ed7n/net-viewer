@@ -5,11 +5,14 @@
  */
 
 import { MESSAGES } from "./constants.mjs";
+import { application } from "./application-model.mjs";
 import {
   close,
   loadFile,
   loadReader,
   loadUrl,
+  doScan,
+  undoScan,
   getFilterEntries,
   getFrameEntry,
   getFrameEntries,
@@ -96,18 +99,7 @@ function setupButtonEvents() {
     getTextEntries,
     getTransformEntries,
   ];
-  addActionListener(buttons.applicationPwa, () => {
-    switch (getView()) {
-      case "frame":
-      case "nul":
-        location.assign("pwa");
-        break;
-      default:
-        if (confirm(COMMON_MESSAGES.windowUnload)) {
-          location.assign("pwa");
-        }
-    }
-  });
+  addActionListener(buttons.applicationPwa, () => open("pwa", "_blank"));
   addActionListener(buttons.fileEject, close);
   addActionListener(buttons.fileLoad, () => getSource().element.click());
   addActionListener(buttons.fileLoadUrl, () => {
@@ -137,7 +129,7 @@ function setupButtonEvents() {
     ["P05", 5],
     ["P20", 20],
   ].forEach(([key, operand]) => {
-    addActionListener(buttons["mediaSearch" + key], () => {
+    addActionListener(buttons["mediaJump" + key], () => {
       const view = getView();
       switch (view) {
         case "audio":
@@ -158,6 +150,23 @@ function setupButtonEvents() {
   });
   addActionListener(buttons.viewCollapse, collapseAll);
   addActionListener(buttons.viewExpand, expandAll);
+  const release = (event) => {
+    undoScan();
+    event.target.releasePointerCapture(event.pointerId);
+  };
+  [
+    ["Faster", 2],
+    ["Slower", 0.5],
+  ].forEach(([key, factor]) => {
+    const element = buttons["mediaScan" + key].element;
+    element.addEventListener("contextmenu", (event) => event.preventDefault());
+    element.addEventListener("lostpointercapture", release);
+    element.addEventListener("pointerdown", (event) => {
+      doScan(factor);
+      event.target.setPointerCapture(event.pointerId);
+    });
+    element.addEventListener("pointerup", release);
+  });
 }
 
 /** Adds listeners to entries that update outputs. */
